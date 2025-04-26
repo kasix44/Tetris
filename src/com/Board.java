@@ -24,6 +24,8 @@ public class Board extends JPanel {
     private boolean isFallingFinished = false;
     private boolean isPaused =false;
     private int numLinesRemoved = 0;
+    private int score = 0;
+    private int multiplier = 1;
     private int curX =0;
     private int curY =0;
     private JLabel statusbar;
@@ -189,7 +191,7 @@ public class Board extends JPanel {
             curPiece.setShape(Tet.NoShape);
             timer.stop();
 
-            var msg = String.format("Game over. Score: %d", numLinesRemoved);
+            var msg = String.format("Game over. Final Score: %d | Lines: %d", score, numLinesRemoved);
             statusbar.setText(msg);
         }
     }
@@ -254,13 +256,16 @@ public class Board extends JPanel {
         }
 
         if(numFullLines > 0) {
-
+            // Update multiplier based on number of lines cleared
+            multiplier = numFullLines;
+            
+            // Update score with squared points (n²)
+            score += numFullLines * numFullLines;
             numLinesRemoved += numFullLines;
 
-            statusbar.setText(String.valueOf(numLinesRemoved));
+            statusbar.setText(String.format("Score: %d | Lines: %d | Multiplier: x%d", score, numLinesRemoved, multiplier));
             isFallingFinished = true;
             curPiece.setShape(Tet.NoShape);
-
         }
     }
 
